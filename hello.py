@@ -1,2 +1,2 @@
-# Mi primer programa de Hola Mundo en Python.
+# Mi primer programa de Hola Mundo en Python
 print('Hello World!')

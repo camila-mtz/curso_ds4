@@ -7,7 +7,7 @@ def main():
     X = [x for x in range(1,11)]
     Y = [funciones.calcular_y(x, m, b) for x in X]
     print(f'Enteros:')
-    coordenadas_enteros = zip(X,Y)
+    coordenadas_enteros = list(zip(X,Y))
     print(coordenadas_enteros)
 
 if __name__ == '__main__':

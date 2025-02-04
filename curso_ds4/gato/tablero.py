@@ -3,7 +3,7 @@ tablero.py: Dibuja el tablero del juego de el gato
 '''
 import random
 
-def dibuja_tablero(simbolos:dict):
+def dibuja_tablero(simbolos: dict):
     '''
     Dibuja el tablero del juego de el gato
     '''
@@ -15,7 +15,7 @@ def dibuja_tablero(simbolos:dict):
      {simbolos['7']} │ {simbolos['8']} │ {simbolos['9']}
     ''')
 
-def ia(simbolos:dict):
+def ia(simbolos: dict):
     '''Juega la maquina'''
     ocupado = True
     while ocupado == True:
@@ -24,14 +24,14 @@ def ia(simbolos:dict):
             simbolos[x] = 'O'
             ocupado = False
 
-def usuario(simbolos:dict):
+def usuario(simbolos: dict):
     '''Juega el usuario'''
-    numeros = [str(i) for i in range(1,10)] # del 1 al 9
+    numeros = [str(i) for i in range(1, 10)] # del 1 al 9
     ocupado = True
     while ocupado == True:
         x = input('Ingresa el numero de la casilla: ')
         if x in numeros:
-            if simbolos[x] not in ['X','O']:
+            if simbolos[x] not in ['X', 'O']:
                 simbolos[x] = 'X'
                 ocupado = False
             else:
@@ -39,21 +39,42 @@ def usuario(simbolos:dict):
         else:
             print ('Numero incorrecto')
 
-def juego(simbolos:dict):
+def juego(simbolos: dict):
     '''Juego del gato'''
-    lista_combinaciones=[
-        ['1','2','3'],
-        ['4','5','6'],
-        ['7','8','9'],
-        ['1','4','7'],
-        ['2','5','8'],
-        ['3','6','9'],
-        ['1','5','9'],
-        ['3','5','7']
+    lista_combinaciones = [
+        ["1", "2", "3"],
+        ["4", "5", "6"],
+        ["7", "8", "9"],
+        ["1", "4", "7"],
+        ["2", "5", "8"],
+        ["3", "6", "9"],
+        ["1", "5", "9"],
+        ["3", "5", "7"],
     ]
     en_juego = True
+    movimientos = 0
+    ganador = ""
+    dibuja_tablero(simbolos)
+    while en_juego:
+        if movimientos > 9:
+            usuario(simbolos)
+            dibuja_tablero(simbolos)
+            movimientos += 1
+            gana = checa_winner(simbolos, lista_combinaciones)
+            if gana is True:
+                en_juego = False
+                ganador = "usuario/a"
+            ia(simbolos)
+            dibuja_tablero(simbolos)
+            movimientos += 1
+            gana = checa_winner(simbolos, lista_combinaciones)
+            if gana is True:
+                en_juego = False
+                ganador = "computadora"
+        else:
+            en_juego = False
 
-def checa_winner(simbolos:dict, combinaciones:list):
+def checa_winner(simbolos: dict, combinaciones: list):
     '''Checa si hay un ganador'''
     for c in combinaciones:
         if simbolos[c[0]] == simbolos[c[1]] == simbolos[c[2]]:
@@ -61,14 +82,15 @@ def checa_winner(simbolos:dict, combinaciones:list):
     return None
 
 if __name__ == '__main__':
-    numeros = [str(i) for i in range(1,10)]
-    dsimbolos = {x:x for x in numeros}
+    numeros = [str(i) for i in range(1, 10)]
+    dsimbolos = {x: x for x in numeros}
+    juego(dsimbolos)
+    '''
     dibuja_tablero(dsimbolos)
     ia(dsimbolos)
     dibuja_tablero(dsimbolos)
     usuario(dsimbolos)
     dibuja_tablero(dsimbolos)
-    '''
     x = random.choice(numeros)
     numeros.remove(x)
     dsimbolos[x] = 'X'

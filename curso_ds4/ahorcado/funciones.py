@@ -1,5 +1,5 @@
 '''
-Funciones auziliares del juego ahorcado
+Funciones auxiliares del juego ahorcado
 '''
 import string
 import unicodedata
@@ -25,7 +25,7 @@ def despliega_plantilla(diccionario:dict, nivel:int):
     '''
     Despliega una plantilla del juego
     '''
-    if nivel >=0 and nivel <=5:
+    if nivel in diccionario:
         template = diccionario[nivel]
         for renglon in template:
             print(renglon.rstrip())
@@ -36,7 +36,7 @@ def obten_palabras(lista:list)->list:
     '''
     texto = ' '.join(lista[120:]) 
     palabras = texto.split()
-    # Cobvertimos a minusculas
+    # Convertimos a minusculas
     minusculas = [palabra.lower() for palabra in palabras]
     set_palabras = set(minusculas)
     # Removemos signos de puntuacion y caracteres especiales
@@ -45,10 +45,9 @@ def obten_palabras(lista:list)->list:
     set_palabras = {palabra for palabra in set_palabras if palabra.isalpha()}
     # Removemos acentos
     set_palabras = {unicodedata.normalize('NFKD', palabra).encode('ascii', 'ignore').decode('ascii') for palabra in set_palabras}
-    
     return list(set_palabras)
 
-def adivina_letra(abc:dict, palabra:str, letras_adivinadas:set, turnos:int):
+def adivina_letra(abc:dict, palabra:str, letras_adivinadas:set, turnos:int)->int:
     '''
     Adivina una letra de una palabra
     '''
@@ -58,37 +57,37 @@ def adivina_letra(abc:dict, palabra:str, letras_adivinadas:set, turnos:int):
             palabra_oculta += letra
         else:
             palabra_oculta += "_"
-    print(f'Tienes {turnos} turnos')
-    print(f'La palabra es: {palabra}')
-    print(f'El abecedario es: {abc}')
+    print(f'Tienes {turnos} oportunidades de fallar')
+    abcd = ' '.join(abc.values())
+    print(f'El abecedario es: {abcd}')
+    print(f'La palabra es: {palabra_oculta}')
     letra = input('Ingresa una letra: ')
     letra = letra.lower()
-    if len(letra) !=1 or letra not in abc:
-        print('Ingresa una letra valida')
-    else:
-        if abc[letra] == "*":
-            print('Ya ingresaste esa letra')
-        else:
-            abc[letra] = "*"
-            if letra in palabra:
-                letras_adivinadas.add(letra)
+    if letra in abc:
+            if abc[letra] == "*":
+                print('Ya adivinaste esa letra')
             else:
-                turnos -= 1
+                abc[letra]= "*"
+                if letra in palabra:
+                    letras_adivinadas.add(letra)
+                else:
+                    turnos -= 1
+    return turnos
 
 
 
 if __name__ == '__main__':
     plantilla = carga_plantillas('plantilla')
-    despliega_plantilla(plantilla,0)
+    despliega_plantilla(plantilla,5)
     lista_oraciones = carga_archivo_texto('./curso_ds4/ahorcado/datos/pg15532.txt')
     lista_palabras = obten_palabras(lista_oraciones)
     print(len(lista_palabras))
     p = choice(lista_palabras)
     print(p)
-    abcedario = {letra:letra for letra in string.ascii_lowercase}
+    abcdario = {letra:letra for letra in string.ascii_lowercase}
     letras_adivinadas = set()
-    turnos = 5
-    print(f"Tienes {turnos} turnos")
-    adivina_letra(abcedario, p, letras_adivinadas, turnos)
-    print(f"Tienes {turnos} tunros")
-    adivina_letra(abcedario, p, letras_adivinadas, turnos)
+    t = 5 # Oportunidades
+    t = adivina_letra(abcdario, p, letras_adivinadas, t)
+    print(t)
+    t = adivina_letra(abcdario, p, letras_adivinadas, t)
+    print(t)

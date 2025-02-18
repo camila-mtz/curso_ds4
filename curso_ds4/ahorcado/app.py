@@ -33,7 +33,7 @@ def main(archivo_texto:str, nombre_plantilla='plantilla'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Juego del ahorcado')
-    parser.add_argument('archivo', help='Archivo de texto con palabras', default='./curso_ds4/ahorcado/datos/pg15532.txt')
+    parser.add_argument('-a', '--archivo', help='Archivo de texto con palabras', default='./curso_ds4/ahorcado/datos/pg15532.txt')
     args = parser.parse_args()
     archivo = args.archivo
     if os.stat(archivo) == False:

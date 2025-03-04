@@ -6,7 +6,7 @@ from Athlete import Athlete
 from Sport import Sport
 from Team import Team
 from Game import Game
-
+import game_logic as gl
 
 def main(archivo_torneo:str):
     ''' Función principal del juego '''
@@ -74,6 +74,8 @@ def main(archivo_torneo:str):
         game.play()
         print(game)
         print("----------------")
+    tablero = gl.scoring(torneo)
+    gl.display_tablero(tablero)
 
 if __name__ == "__main__":
     archivo = "torneo.json"
